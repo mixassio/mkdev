@@ -1,13 +1,17 @@
 import React, { Component } from "react";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import styled from "styled-components";
+import { BorderLinearProgress, Score, GameArea, Equation } from './index';
 
 const randomInRange = (min: number, max: number) =>
   Math.round(Math.random() * (max - min) + min);
 
 const INITIAL_GAME_SPEED = 500;
 
-interface Props {}
+interface Props {
+  color: string;
+  changeScore(newScore: number): void;
+  changeTimeLeft(newTimeLeft: number): void;
+  changeGameOver(newGameOver: boolean): void;
+}
 
 interface State {
   score: number;
@@ -18,68 +22,11 @@ interface State {
   timerId?: number;
   gameOver: boolean;
   gameSpeed: number;
-}
+};
 
-const BorderLinearProgress = styled(LinearProgress)(
-  (props: { fill: string }) => ({
-    height: "30px !important",
-    backgroundColor: `${props.fill}77 !important`,
-    "& > div": {
-      backgroundColor: props.fill
-    }
-  })
-);
-
-const GameWindow = styled.div`
-  width: 320px;
-  border: 1px solid ${props => props.color};
-
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-
-  font-family: "Roboto", sans-serif;
-  font-size: 20px;
-`;
-
-const GameArea = styled.div`
-  padding: 10px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Score = styled.div`
-  float: right;
-  font-size: 25px;
-`;
-
-const Equation = styled.span`
-  display: inline-flex;
-  align-items: center;
-
-  & span {
-    width: 22px;
-    height: 22px;
-    line-height: 22px;
-
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2px;
-  }
-
-  & input {
-    width: 22px;
-  }
-`;
-
-class App extends Component<Props, State> {
+class BorderLinearProgressContainer extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-
     this.state = {
       score: 0,
       timeLeft: 100,
@@ -107,7 +54,11 @@ class App extends Component<Props, State> {
       );
     }, 10000);
 
-    this.play();
+    this.setState({
+      value: "",
+      dicePair: [randomInRange(1, 6), randomInRange(1, 6)],
+      result: randomInRange(12, 20),
+    })
   }
 
   startTimer = () => {
@@ -163,24 +114,6 @@ class App extends Component<Props, State> {
       };
     });
 
-  rollDice = () =>
-    this.setState({
-      dicePair: [randomInRange(1, 6), randomInRange(1, 6)]
-    });
-
-  generateResult = () =>
-    this.setState({
-      result: randomInRange(12, 20)
-    });
-
-  play = () => {
-    this.clearInput();
-    this.rollDice();
-    this.generateResult();
-  };
-
-  clearInput = () => this.setState({ value: "" });
-
   nextStage = () => {
     const { dicePair, value, result } = this.state;
     const [arg1, arg2] = dicePair;
@@ -194,7 +127,11 @@ class App extends Component<Props, State> {
     this.increaseTimer(20);
     this.increaseScore();
 
-    this.play();
+    this.setState({
+      value: "",
+      dicePair: [randomInRange(1, 6), randomInRange(1, 6)],
+      result: randomInRange(12, 20),
+    });
   };
 
   handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -213,23 +150,12 @@ class App extends Component<Props, State> {
   };
 
   render(): React.ReactNode {
-    const { dicePair, value, timeLeft, result, gameOver, score } = this.state;
+    const { color } = this.props;
+    const { dicePair, value, timeLeft, result, score } = this.state;
     const [dice1, dice2] = dicePair;
 
-    if (gameOver || timeLeft < 0)
-      return (
-        <GameWindow color="transparent">
-          You lose! Your score is {score} points
-        </GameWindow>
-      );
-
-    let color = "#ff6c5c";
-
-    if (timeLeft > 30) color = "#ffa000";
-    if (timeLeft > 60) color = "#43a047";
-
     return (
-      <GameWindow color={color}>
+      <>
         <BorderLinearProgress
           variant="determinate"
           value={timeLeft < 100 ? timeLeft : 100}
@@ -252,12 +178,16 @@ class App extends Component<Props, State> {
             <span>=</span>
             <span>{result}</span>
           </Equation>
-
-          <Score>{score}</Score>
+        <Score>{score}</Score>
         </GameArea>
-      </GameWindow>
+      </>
     );
   }
+
 }
 
-export default App;
+
+
+
+
+export default BorderLinearProgressContainer;
