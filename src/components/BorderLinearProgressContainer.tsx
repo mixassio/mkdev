@@ -78,16 +78,19 @@ class BorderLinearProgressContainer extends Component<Props, State> {
 
   finishGame = () => {
     const { timerId } = this.state;
-
+   this.props.changeGameOver(true);
     this.setState({ gameOver: true });
 
     window.clearInterval(timerId);
   };
 
-  increaseScore = () =>
+  increaseScore = () => {
     this.setState(prevState => {
+      this.props.changeScore(prevState.score + 1);
       return { score: prevState.score + 1 };
-    });
+    })
+  }
+  ;
 
   increaseTimer = (penalty?: number) =>
     this.setState(prevState => {
@@ -99,7 +102,7 @@ class BorderLinearProgressContainer extends Component<Props, State> {
             ? 100
             : penalty + prevState.timeLeft;
       }
-
+      this.props.changeTimeLeft(timeLeft);
       return {
         timeLeft
       };
@@ -107,11 +110,13 @@ class BorderLinearProgressContainer extends Component<Props, State> {
 
   decreaseTimer = (penalty?: number) =>
     this.setState(prevState => {
+      const timeLeft = penalty
+        ? prevState.timeLeft - penalty
+        : prevState.timeLeft - 1
+      this.props.changeTimeLeft(timeLeft);
       return {
-        timeLeft: penalty
-          ? prevState.timeLeft - penalty
-          : prevState.timeLeft - 1
-      };
+        timeLeft
+      }
     });
 
   nextStage = () => {

@@ -31,11 +31,9 @@ class App extends Component<Props, State> {
     const over = gameOver || timeLeft < 0;
 
     let color = "#ff6c5c";
-    /*
     if (over) color = "transparent";
     if (timeLeft > 30) color = "#ffa000";
     if (timeLeft > 60) color = "#43a047";
-    */
 
     return (
       <GameWindow color={color}>
