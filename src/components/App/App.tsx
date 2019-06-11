@@ -1,14 +1,7 @@
 import React, { Component } from "react";
-import { GameWindow, BorderLinearProgressContainer } from './index';
-
-
-interface Props {}
-
-interface State {
-  score: number;
-  timeLeft: number;
-  gameOver: boolean;
-}
+import { BorderLinearProgressContainer } from '../BorderLinearProgress';
+import { GameWindow } from '../../styled';
+import { Props, State } from "./App.spec";
 
 class App extends Component<Props, State> {
   constructor(props: Props) {
