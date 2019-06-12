@@ -13,7 +13,7 @@ const INITIAL_GAME_SPEED = 500;
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setValueAction: (newVal: any) => dispatch(setValue(newVal)),
+    setValue: (newVal: any) => dispatch(setValue(newVal)),
   }
 }
 const mapStateToProps = (state: any) => ({ value: state.value });
