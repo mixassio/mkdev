@@ -14,6 +14,7 @@ const mapDispatchToProps = (dispatch: any) => {
     newQwestion: () => dispatch(newQwestion()),
     increaseScore: () => dispatch(increaseScore()),
     setGameOver: () => dispatch(setGameOver()),
+
   }
 }
 const mapStateToProps = (state: any) => ({

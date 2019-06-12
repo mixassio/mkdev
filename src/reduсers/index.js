@@ -8,7 +8,6 @@ const randomInRange = (min, max) =>
 
 const value = handleActions({
     [actions.setValue](state='', { payload: { value } }) {
-        console.log(value);
         return value;
     }
 }, '');
