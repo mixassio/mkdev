@@ -3,8 +3,7 @@ import Score from './Score';
 import Equation from './Equation';
 import GameArea from './GameArea';
 
-export  {
-  
+export {
   GameWindow,
   Score,
   Equation,

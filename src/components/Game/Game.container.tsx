@@ -1,31 +1,24 @@
 import React, { Component } from "react";
-import { BorderLinearProgress } from './index';
+import { Game } from './index';
 import { Score, GameArea, Equation } from '../../styled';
+import { Props, State } from './Game.spec';
+import { connect } from 'react-redux';
+import { setValue } from '../../actions'
 
 const randomInRange = (min: number, max: number) =>
   Math.round(Math.random() * (max - min) + min);
 
 const INITIAL_GAME_SPEED = 500;
 
-interface Props {
-  color: string;
-  changeScore(newScore: number): void;
-  changeTimeLeft(newTimeLeft: number): void;
-  changeGameOver(newGameOver: boolean): void;
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    setValueAction: (newVal: any) => dispatch(setValue(newVal)),
+  }
 }
+const mapStateToProps = (state: any) => ({ value: state.value });
 
-interface State {
-  score: number;
-  timeLeft: number;
-  dicePair: [number, number];
-  result: number;
-  value: string;
-  timerId?: number;
-  gameOver: boolean;
-  gameSpeed: number;
-};
-
-class BorderLinearProgressContainer extends Component<Props, State> {
+class GameContainer extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -33,7 +26,7 @@ class BorderLinearProgressContainer extends Component<Props, State> {
       timeLeft: 100,
       dicePair: [1, 1],
       result: 0,
-      value: "",
+      newValue: "",
       timerId: undefined,
       gameOver: false,
       gameSpeed: INITIAL_GAME_SPEED
@@ -56,7 +49,7 @@ class BorderLinearProgressContainer extends Component<Props, State> {
     }, 10000);
 
     this.setState({
-      value: "",
+      newValue: "",
       dicePair: [randomInRange(1, 6), randomInRange(1, 6)],
       result: randomInRange(12, 20),
     })
@@ -121,9 +114,9 @@ class BorderLinearProgressContainer extends Component<Props, State> {
     });
 
   nextStage = () => {
-    const { dicePair, value, result } = this.state;
+    const { dicePair, newValue, result } = this.state;
     const [arg1, arg2] = dicePair;
-    const arg3 = parseInt(value);
+    const arg3 = parseInt(newValue);
 
     if (arg1 + arg2 + arg3 !== result) {
       this.decreaseTimer(20);
@@ -134,19 +127,20 @@ class BorderLinearProgressContainer extends Component<Props, State> {
     this.increaseScore();
 
     this.setState({
-      value: "",
+      newValue: "",
       dicePair: [randomInRange(1, 6), randomInRange(1, 6)],
       result: randomInRange(12, 20),
     });
   };
 
   handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
-    const value = e.currentTarget.value;
-    const intVal = parseInt(value);
+    const { setValue } = this.props;
+    const valueCurrent = e.currentTarget.value;
+    const intVal = parseInt(valueCurrent);
 
-    if (!intVal && intVal !== 0 && value !== "") return;
-
-    this.setState({ value });
+    if (!intVal && intVal !== 0 && valueCurrent !== "") return;
+    setValue({ payload: valueCurrent });
+    this.setState({ newValue: valueCurrent });
   };
 
   handleInputKeyPress = (e: React.KeyboardEvent) => {
@@ -157,12 +151,12 @@ class BorderLinearProgressContainer extends Component<Props, State> {
 
   render(): React.ReactNode {
     const { color } = this.props;
-    const { dicePair, value, timeLeft, result, score } = this.state;
+    const { dicePair, newValue, timeLeft, result, score } = this.state;
     const [dice1, dice2] = dicePair;
 
     return (
       <>
-        <BorderLinearProgress
+        <Game
           variant="determinate"
           value={timeLeft < 100 ? timeLeft : 100}
           fill={color}
@@ -177,7 +171,7 @@ class BorderLinearProgressContainer extends Component<Props, State> {
               type="text"
               min={0}
               max={20}
-              value={value}
+              value={newValue}
               onChange={this.handleInputChange}
               onKeyPress={this.handleInputKeyPress}
             />
@@ -193,7 +187,4 @@ class BorderLinearProgressContainer extends Component<Props, State> {
 }
 
 
-
-
-
-export default BorderLinearProgressContainer;
+export default connect(mapStateToProps, mapDispatchToProps)(GameContainer);

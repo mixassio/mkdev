@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-const BorderLinearProgress = styled(LinearProgress)(
+const Game = styled(LinearProgress)(
   (props: { fill: string }) => ({
     height: "30px !important",
     backgroundColor: `${props.fill}77 !important`,
@@ -11,4 +11,4 @@ const BorderLinearProgress = styled(LinearProgress)(
   })
 );
 
-export default BorderLinearProgress;
+export default Game;

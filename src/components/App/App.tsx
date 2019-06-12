@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BorderLinearProgressContainer } from '../BorderLinearProgress';
+import { GameContainer } from '../Game';
 import { GameWindow } from '../../styled';
 import { Props, State } from "./App.spec";
 
@@ -32,7 +32,7 @@ class App extends Component<Props, State> {
       <GameWindow color={color}>
         {over ?
           `You lose! Your score is ${score} points` :
-          <BorderLinearProgressContainer
+          <GameContainer
             color={color}
             changeScore={this.changeScore}
             changeTimeLeft={this.changeTimeLeft}
