@@ -1,7 +1,8 @@
-export interface Props {};
+export interface Props {
+  score: number;
+  gameOver: boolean;
+};
 
 export interface State {
-  score: number;
   timeLeft: number;
-  gameOver: boolean;
 };

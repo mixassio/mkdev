@@ -3,32 +3,33 @@ import { Game } from './index';
 import { Score, GameArea, Equation } from '../../styled';
 import { Props, State } from './Game.spec';
 import { connect } from 'react-redux';
-import { setValue } from '../../actions'
-
-const randomInRange = (min: number, max: number) =>
-  Math.round(Math.random() * (max - min) + min);
+import { setValue, newQwestion, increaseScore, setGameOver } from '../../actions'
 
 const INITIAL_GAME_SPEED = 500;
 
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setValueAction: (newVal: any) => dispatch(setValue(newVal)),
+    setValue: (newVal: any) => dispatch(setValue(newVal)),
+    newQwestion: () => dispatch(newQwestion()),
+    increaseScore: () => dispatch(increaseScore()),
+    setGameOver: () => dispatch(setGameOver()),
   }
 }
-const mapStateToProps = (state: any) => ({ value: state.value });
+const mapStateToProps = (state: any) => ({
+  value: state.value,
+  score: state.score,
+  dicePair: state.dicePair,
+  result: state.result,
+  gameOver: state.gameOver,
+});
 
 class GameContainer extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      score: 0,
       timeLeft: 100,
-      dicePair: [1, 1],
-      result: 0,
-      newValue: "",
       timerId: undefined,
-      gameOver: false,
       gameSpeed: INITIAL_GAME_SPEED
     };
   }
@@ -48,19 +49,17 @@ class GameContainer extends Component<Props, State> {
       );
     }, 10000);
 
-    this.setState({
-      newValue: "",
-      dicePair: [randomInRange(1, 6), randomInRange(1, 6)],
-      result: randomInRange(12, 20),
-    })
+    this.props.newQwestion();
   }
 
   startTimer = () => {
     const id = window.setInterval(() => {
-      const { timeLeft } = this.state;
+      const { timeLeft, timerId } = this.state;
+      const { setGameOver } = this.props;
 
       if (timeLeft <= 0) {
-        this.finishGame();
+        setGameOver();
+        window.clearInterval(timerId);
         return;
       }
 
@@ -69,22 +68,6 @@ class GameContainer extends Component<Props, State> {
 
     this.setState({ timerId: id });
   };
-
-  finishGame = () => {
-    const { timerId } = this.state;
-   this.props.changeGameOver(true);
-    this.setState({ gameOver: true });
-
-    window.clearInterval(timerId);
-  };
-
-  increaseScore = () => {
-    this.setState(prevState => {
-      this.props.changeScore(prevState.score + 1);
-      return { score: prevState.score + 1 };
-    })
-  }
-  ;
 
   increaseTimer = (penalty?: number) =>
     this.setState(prevState => {
@@ -114,9 +97,8 @@ class GameContainer extends Component<Props, State> {
     });
 
   nextStage = () => {
-    const { dicePair, newValue, result } = this.state;
-    const [arg1, arg2] = dicePair;
-    const arg3 = parseInt(newValue);
+    const { dicePair: [arg1, arg2], result, newQwestion, value, increaseScore } = this.props;
+    const arg3 = parseInt(value);
 
     if (arg1 + arg2 + arg3 !== result) {
       this.decreaseTimer(20);
@@ -124,23 +106,16 @@ class GameContainer extends Component<Props, State> {
     }
 
     this.increaseTimer(20);
-    this.increaseScore();
-
-    this.setState({
-      newValue: "",
-      dicePair: [randomInRange(1, 6), randomInRange(1, 6)],
-      result: randomInRange(12, 20),
-    });
+    increaseScore();
+    newQwestion();    
   };
 
   handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { setValue } = this.props;
     const valueCurrent = e.currentTarget.value;
     const intVal = parseInt(valueCurrent);
-
     if (!intVal && intVal !== 0 && valueCurrent !== "") return;
-    setValue({ payload: valueCurrent });
-    this.setState({ newValue: valueCurrent });
+    setValue({ value: valueCurrent });
   };
 
   handleInputKeyPress = (e: React.KeyboardEvent) => {
@@ -150,9 +125,8 @@ class GameContainer extends Component<Props, State> {
   };
 
   render(): React.ReactNode {
-    const { color } = this.props;
-    const { dicePair, newValue, timeLeft, result, score } = this.state;
-    const [dice1, dice2] = dicePair;
+    const { color, value, dicePair: [dice1, dice2], result, score } = this.props;
+    const { timeLeft } = this.state;
 
     return (
       <>
@@ -171,7 +145,7 @@ class GameContainer extends Component<Props, State> {
               type="text"
               min={0}
               max={20}
-              value={newValue}
+              value={value}
               onChange={this.handleInputChange}
               onKeyPress={this.handleInputKeyPress}
             />

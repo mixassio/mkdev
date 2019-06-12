@@ -1,26 +1,27 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
 import { GameContainer } from '../Game';
 import { GameWindow } from '../../styled';
 import { Props, State } from "./App.spec";
 
+const mapStateToProps = (state: any) => ({
+  score: state.score,
+  gameOver: state.gameOver,
+});
 class App extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
     this.state = {
-      score: 0,
       timeLeft: 100,
-      gameOver: false,
     };
   }
 
-  changeScore = (newScore: number) => this.setState({ score: newScore });
   changeTimeLeft = (newTimeLeft: number) => this.setState({ timeLeft: newTimeLeft });
-  changeGameOver = (newGameOver: boolean) => this.setState({ gameOver: newGameOver });
 
   render(): React.ReactNode {
-    const { timeLeft, gameOver, score } = this.state;
-
+    const { timeLeft } = this.state;
+    const { score, gameOver } = this.props;
     const over = gameOver || timeLeft < 0;
 
     let color = "#ff6c5c";
@@ -34,9 +35,7 @@ class App extends Component<Props, State> {
           `You lose! Your score is ${score} points` :
           <GameContainer
             color={color}
-            changeScore={this.changeScore}
             changeTimeLeft={this.changeTimeLeft}
-            changeGameOver={this.changeGameOver}
           />
         }
       </GameWindow>
@@ -44,4 +43,4 @@ class App extends Component<Props, State> {
   }
 }
 
-export default App;
+export default connect(mapStateToProps)(App);

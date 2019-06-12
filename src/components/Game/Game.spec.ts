@@ -1,18 +1,19 @@
 export interface Props {
     color: string;
+    value: string;
+    dicePair: [number, number];
+    result: number;
+    score: number;
+    gameOver: boolean;
     setValue(val: any): void;
-    changeScore(newScore: number): void;
+    newQwestion(): void;
+    increaseScore(): void;
+    setGameOver(): void;
     changeTimeLeft(newTimeLeft: number): void;
-    changeGameOver(newGameOver: boolean): void;
   }
   
   export interface State {
-    score: number;
     timeLeft: number;
-    dicePair: [number, number];
-    result: number;
-    newValue: string;
     timerId?: number;
-    gameOver: boolean;
     gameSpeed: number;
   };
