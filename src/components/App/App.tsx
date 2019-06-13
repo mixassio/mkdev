@@ -7,21 +7,13 @@ import { Props, State } from "./App.spec";
 const mapStateToProps = (state: any) => ({
   score: state.score,
   gameOver: state.gameOver,
+  timeLeft: state.timeLeft,
 });
+
 class App extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-
-    this.state = {
-      timeLeft: 100,
-    };
-  }
-
-  changeTimeLeft = (newTimeLeft: number) => this.setState({ timeLeft: newTimeLeft });
 
   render(): React.ReactNode {
-    const { timeLeft } = this.state;
-    const { score, gameOver } = this.props;
+    const { score, gameOver, timeLeft } = this.props;
     const over = gameOver || timeLeft < 0;
 
     let color = "#ff6c5c";
@@ -35,7 +27,6 @@ class App extends Component<Props, State> {
           `You lose! Your score is ${score} points` :
           <GameContainer
             color={color}
-            changeTimeLeft={this.changeTimeLeft}
           />
         }
       </GameWindow>

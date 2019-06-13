@@ -3,7 +3,7 @@ import { Game } from './index';
 import { Score, GameArea, Equation } from '../../styled';
 import { Props, State } from './Game.spec';
 import { connect } from 'react-redux';
-import { setValue, newQwestion, increaseScore, setGameOver } from '../../actions'
+import { setValue, newQwestion, increaseScore, setGameOver, decreaseTimer, increaseTimer } from '../../actions'
 
 const INITIAL_GAME_SPEED = 500;
 
@@ -14,7 +14,8 @@ const mapDispatchToProps = (dispatch: any) => {
     newQwestion: () => dispatch(newQwestion()),
     increaseScore: () => dispatch(increaseScore()),
     setGameOver: () => dispatch(setGameOver()),
-
+    increaseTimer: (penalty?: object) => dispatch(increaseTimer(penalty)),
+    decreaseTimer: (penalty?: object) => dispatch(decreaseTimer(penalty))
   }
 }
 const mapStateToProps = (state: any) => ({
@@ -23,13 +24,13 @@ const mapStateToProps = (state: any) => ({
   dicePair: state.dicePair,
   result: state.result,
   gameOver: state.gameOver,
+  timeLeft: state.timeLeft,
 });
 
 class GameContainer extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      timeLeft: 100,
       timerId: undefined,
       gameSpeed: INITIAL_GAME_SPEED
     };
@@ -55,8 +56,8 @@ class GameContainer extends Component<Props, State> {
 
   startTimer = () => {
     const id = window.setInterval(() => {
-      const { timeLeft, timerId } = this.state;
-      const { setGameOver } = this.props;
+      const { timerId } = this.state;
+      const { setGameOver, timeLeft, decreaseTimer } = this.props;
 
       if (timeLeft <= 0) {
         setGameOver();
@@ -64,49 +65,22 @@ class GameContainer extends Component<Props, State> {
         return;
       }
 
-      this.decreaseTimer();
+      decreaseTimer();
     }, this.state.gameSpeed);
 
     this.setState({ timerId: id });
   };
 
-  increaseTimer = (penalty?: number) =>
-    this.setState(prevState => {
-      let timeLeft = prevState.timeLeft + 1;
-
-      if (penalty) {
-        timeLeft =
-          penalty + prevState.timeLeft > 100
-            ? 100
-            : penalty + prevState.timeLeft;
-      }
-      this.props.changeTimeLeft(timeLeft);
-      return {
-        timeLeft
-      };
-    });
-
-  decreaseTimer = (penalty?: number) =>
-    this.setState(prevState => {
-      const timeLeft = penalty
-        ? prevState.timeLeft - penalty
-        : prevState.timeLeft - 1
-      this.props.changeTimeLeft(timeLeft);
-      return {
-        timeLeft
-      }
-    });
-
   nextStage = () => {
-    const { dicePair: [arg1, arg2], result, newQwestion, value, increaseScore } = this.props;
+    const { dicePair: [arg1, arg2], result, newQwestion, value, increaseScore, increaseTimer, decreaseTimer } = this.props;
     const arg3 = parseInt(value);
 
     if (arg1 + arg2 + arg3 !== result) {
-      this.decreaseTimer(20);
+      decreaseTimer({ penalty: 20 });
       return;
     }
 
-    this.increaseTimer(20);
+    increaseTimer({ penalty: 20 });
     increaseScore();
     newQwestion();    
   };
@@ -126,8 +100,7 @@ class GameContainer extends Component<Props, State> {
   };
 
   render(): React.ReactNode {
-    const { color, value, dicePair: [dice1, dice2], result, score } = this.props;
-    const { timeLeft } = this.state;
+    const { color, value, dicePair: [dice1, dice2], result, score, timeLeft } = this.props;
 
     return (
       <>

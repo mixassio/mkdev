@@ -5,15 +5,16 @@ export interface Props {
     result: number;
     score: number;
     gameOver: boolean;
+    timeLeft: number;
     setValue(val: any): void;
     newQwestion(): void;
     increaseScore(): void;
     setGameOver(): void;
-    changeTimeLeft(newTimeLeft: number): void;
+    increaseTimer(penalty?: object): void;
+    decreaseTimer(penalty?: object): void;
   }
   
   export interface State {
-    timeLeft: number;
     timerId?: number;
     gameSpeed: number;
   };
