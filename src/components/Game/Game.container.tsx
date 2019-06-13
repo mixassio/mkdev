@@ -1,30 +1,36 @@
 import React, { Component } from "react";
-import { Game } from './index';
-import { Score, GameArea, Equation } from '../../styled';
-import { Props, State } from './Game.spec';
-import { connect } from 'react-redux';
-import { setValue, newQwestion, increaseScore, setGameOver, decreaseTimer, increaseTimer } from '../../actions'
+import { Game } from "./index";
+import { Score, GameArea, Equation } from "../../styled";
+import { Props, State } from "./Game.spec";
+import { connect } from "react-redux";
+import {
+  setValue,
+  newQuestion,
+  increaseScore,
+  setGameOver,
+  decreaseTimer,
+  increaseTimer
+} from "../../actions";
 
 const INITIAL_GAME_SPEED = 500;
-
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     setValue: (newVal: any) => dispatch(setValue(newVal)),
-    newQwestion: () => dispatch(newQwestion()),
+    newQuestion: () => dispatch(newQuestion()),
     increaseScore: () => dispatch(increaseScore()),
     setGameOver: () => dispatch(setGameOver()),
     increaseTimer: (penalty?: object) => dispatch(increaseTimer(penalty)),
     decreaseTimer: (penalty?: object) => dispatch(decreaseTimer(penalty))
-  }
-}
+  };
+};
 const mapStateToProps = (state: any) => ({
   value: state.value,
   score: state.score,
   dicePair: state.dicePair,
   result: state.result,
   gameOver: state.gameOver,
-  timeLeft: state.timeLeft,
+  timeLeft: state.timeLeft
 });
 
 class GameContainer extends Component<Props, State> {
@@ -51,7 +57,7 @@ class GameContainer extends Component<Props, State> {
       );
     }, 10000);
 
-    this.props.newQwestion();
+    this.props.newQuestion();
   }
 
   startTimer = () => {
@@ -72,7 +78,15 @@ class GameContainer extends Component<Props, State> {
   };
 
   nextStage = () => {
-    const { dicePair: [arg1, arg2], result, newQwestion, value, increaseScore, increaseTimer, decreaseTimer } = this.props;
+    const {
+      dicePair: [arg1, arg2],
+      result,
+      newQuestion,
+      value,
+      increaseScore,
+      increaseTimer,
+      decreaseTimer
+    } = this.props;
     const arg3 = parseInt(value);
 
     if (arg1 + arg2 + arg3 !== result) {
@@ -82,7 +96,7 @@ class GameContainer extends Component<Props, State> {
 
     increaseTimer({ penalty: 20 });
     increaseScore();
-    newQwestion();    
+    newQuestion();
   };
 
   handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -100,7 +114,14 @@ class GameContainer extends Component<Props, State> {
   };
 
   render(): React.ReactNode {
-    const { color, value, dicePair: [dice1, dice2], result, score, timeLeft } = this.props;
+    const {
+      color,
+      value,
+      dicePair: [dice1, dice2],
+      result,
+      score,
+      timeLeft
+    } = this.props;
 
     return (
       <>
@@ -126,13 +147,14 @@ class GameContainer extends Component<Props, State> {
             <span>=</span>
             <span>{result}</span>
           </Equation>
-        <Score>{score}</Score>
+          <Score>{score}</Score>
         </GameArea>
       </>
     );
   }
-
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(GameContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(GameContainer);
