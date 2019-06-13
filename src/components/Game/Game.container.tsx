@@ -4,24 +4,24 @@ import { Score, GameArea, Equation } from "../../styled";
 import { Props, State } from "./Game.spec";
 import { connect } from "react-redux";
 import {
-  setValue,
-  newQuestion,
-  increaseScore,
-  setGameOver,
-  decreaseTimer,
-  increaseTimer
-} from "../../actions";
+  value,
+  dicePair,
+  result,
+  score,
+  gameOver,
+  timeLeft
+} from "../../actionsRedusers";
 
 const INITIAL_GAME_SPEED = 500;
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setValue: (newVal: any) => dispatch(setValue(newVal)),
-    newQuestion: () => dispatch(newQuestion()),
-    increaseScore: () => dispatch(increaseScore()),
-    setGameOver: () => dispatch(setGameOver()),
-    increaseTimer: (penalty?: object) => dispatch(increaseTimer(penalty)),
-    decreaseTimer: (penalty?: object) => dispatch(decreaseTimer(penalty))
+    setValue: (newVal: any) => dispatch(value.actions.setValue(newVal)),
+    newQuestion: () => dispatch(dicePair.actions.newQuestion()),
+    increaseScore: () => dispatch(score.actions.increaseScore()),
+    setGameOver: () => dispatch(gameOver.actions.setGameOver()),
+    increaseTimer: (penalty?: object) => dispatch(timeLeft.actions.increaseTimer(penalty)),
+    decreaseTimer: (penalty?: object) => dispatch(timeLeft.actions.decreaseTimer(penalty))
   };
 };
 const mapStateToProps = (state: any) => ({
