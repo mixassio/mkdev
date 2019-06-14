@@ -6,7 +6,7 @@ import _ from "lodash";
 const randomInRange = (min: number, max: number): number =>
   Math.round(Math.random() * (max - min) + min);
 
-export const dicePair = createSlice({
+export const dicePair: any = createSlice({
     slice: 'dicePair',
     initialState: [1, 1],
     reducers: {
@@ -14,7 +14,7 @@ export const dicePair = createSlice({
     }
 });
 
-export const value = createSlice({
+export const value: any = createSlice({
     slice: 'value',
     initialState: '',
     reducers: {
@@ -25,7 +25,7 @@ export const value = createSlice({
     }
 });
 
-export const result = createSlice({
+export const result: any = createSlice({
     slice: 'result',
     initialState: 0,
     extraReducers: {
@@ -33,7 +33,7 @@ export const result = createSlice({
     }
 });
     
-export const score = createSlice({
+export const score: any = createSlice({
     slice: 'score',
     initialState: 0,
     reducers: {
