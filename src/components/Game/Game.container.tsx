@@ -3,25 +3,26 @@ import { Game } from "./index";
 import { Score, GameArea, Equation } from "../../styled";
 import { Props, State } from "./Game.spec";
 import { connect } from "react-redux";
-import {
-  value,
-  dicePair,
-  result,
-  score,
-  gameOver,
-  timeLeft
-} from "../../actionsRedusers";
+import { actions } from "../../actionsRedusers";
 
 const INITIAL_GAME_SPEED = 500;
 
+const {
+  dicePairActions,
+  valueActions,
+  scoreActions,
+  gameOverActions,
+  timeLeftActions
+} = actions;
+
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setValue: (newVal: any) => dispatch(value.actions.setValue(newVal)),
-    newQuestion: () => dispatch(dicePair.actions.newQuestion()),
-    increaseScore: () => dispatch(score.actions.increaseScore()),
-    setGameOver: () => dispatch(gameOver.actions.setGameOver()),
-    increaseTimer: (penalty?: object) => dispatch(timeLeft.actions.increaseTimer(penalty)),
-    decreaseTimer: (penalty?: object) => dispatch(timeLeft.actions.decreaseTimer(penalty))
+    setValue: (newVal: any) => dispatch(valueActions.setValue(newVal)),
+    newQuestion: () => dispatch(dicePairActions.newQuestion()),
+    increaseScore: () => dispatch(scoreActions.increaseScore()),
+    setGameOver: () => dispatch(gameOverActions.setGameOver()),
+    increaseTimer: (penalty?: any) => dispatch(timeLeftActions.increaseTimer(penalty)),
+    decreaseTimer: (penalty?: any) => dispatch(timeLeftActions.decreaseTimer(penalty))
   };
 };
 const mapStateToProps = (state: any) => ({

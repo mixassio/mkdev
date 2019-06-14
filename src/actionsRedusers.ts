@@ -6,7 +6,7 @@ import _ from "lodash";
 const randomInRange = (min: number, max: number): number =>
   Math.round(Math.random() * (max - min) + min);
 
-export const dicePair: any = createSlice({
+const dicePair = createSlice({
     slice: 'dicePair',
     initialState: [1, 1],
     reducers: {
@@ -14,26 +14,27 @@ export const dicePair: any = createSlice({
     }
 });
 
-export const value: any = createSlice({
+const value = createSlice({
     slice: 'value',
     initialState: '',
     reducers: {
         setValue: (state, action) => action.payload.value,
     },
     extraReducers: {
-        [dicePair.actions.newQuestion]: (state) => '',
+        [dicePair.actions.newQuestion.toString()]: (state) => '',
     }
 });
 
-export const result: any = createSlice({
+const result = createSlice({
     slice: 'result',
     initialState: 0,
+    reducers: {},
     extraReducers: {
-        [dicePair.actions.newQuestion]: (state) => randomInRange(12, 20),
+        [dicePair.actions.newQuestion.toString()]: (state) => randomInRange(12, 20),
     }
 });
     
-export const score: any = createSlice({
+const score = createSlice({
     slice: 'score',
     initialState: 0,
     reducers: {
@@ -41,7 +42,7 @@ export const score: any = createSlice({
     }
 });
 
-export const gameOver = createSlice({
+const gameOver = createSlice({
     slice: 'gameOver',
     initialState: false,
     reducers: {
@@ -49,7 +50,7 @@ export const gameOver = createSlice({
     }
 });
       
-export const timeLeft = createSlice({
+const timeLeft = createSlice({
     slice: 'timeLeft',
     initialState: 100,
     reducers: {
@@ -69,11 +70,20 @@ export const timeLeft = createSlice({
     }
 });
 
+export const actions = {
+    dicePairActions: dicePair.actions,
+    valueActions: value.actions,
+    resultActions: result.actions,
+    scoreActions: score.actions,
+    gameOverActions: gameOver.actions,
+    timeLeftActions: timeLeft.actions
+};
+
 export default combineReducers({
-    value,
-    dicePair,
-    result,
-    score,
-    gameOver,
-    timeLeft
+    dicePair: dicePair.reducer,
+    value: value.reducer,
+    result: result.reducer,
+    score: score.reducer,
+    gameOver: gameOver.reducer,
+    timeLeft: timeLeft.reducer
   });

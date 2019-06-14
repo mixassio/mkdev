@@ -10,8 +10,8 @@ export interface Props {
   newQuestion(): void;
   increaseScore(): void;
   setGameOver(): void;
-  increaseTimer(penalty?: object): void;
-  decreaseTimer(penalty?: object): void;
+  increaseTimer(penalty?: any): void;
+  decreaseTimer(penalty?: any): void;
 }
 
 export interface State {
