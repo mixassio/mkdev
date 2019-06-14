@@ -49,7 +49,19 @@ const gameOver = createSlice({
         setGameOver: (state) => true,
     }
 });
-      
+
+const scoreBoard = createSlice({
+    slice: 'scoreBoard',
+    initialState: [],
+    reducers: {
+        pushToScoreBoard: (state, { payload }) => {
+            const { endScore } = payload;
+            const arrived = new Date();
+            return [...state, { arrived, score: endScore }];
+        },
+    },
+});
+
 const timeLeft = createSlice({
     slice: 'timeLeft',
     initialState: 100,
@@ -76,6 +88,7 @@ export const actions = {
     valueActions: value.actions,
     resultActions: result.actions,
     scoreActions: score.actions,
+    scoreBoardActions: scoreBoard.actions,
     gameOverActions: gameOver.actions,
     timeLeftActions: timeLeft.actions
 };
@@ -85,6 +98,7 @@ export default combineReducers({
     value: value.reducer,
     result: result.reducer,
     score: score.reducer,
+    scoreBoard: scoreBoard.reducer,
     gameOver: gameOver.reducer,
     timeLeft: timeLeft.reducer
   });

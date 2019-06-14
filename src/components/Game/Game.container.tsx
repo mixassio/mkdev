@@ -12,15 +12,19 @@ const {
   valueActions,
   scoreActions,
   gameOverActions,
+  scoreBoardActions,
   timeLeftActions
 } = actions;
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: any, getState: any) => {
   return {
     setValue: (newVal: any) => dispatch(valueActions.setValue(newVal)),
     newQuestion: () => dispatch(dicePairActions.newQuestion()),
     increaseScore: () => dispatch(scoreActions.increaseScore()),
-    setGameOver: () => dispatch(gameOverActions.setGameOver()),
+    setGameOver: () => {
+      dispatch(gameOverActions.setGameOver());
+      dispatch(scoreBoardActions.pushToScoreBoard({ endScore: getState().score }))
+    },
     increaseTimer: (penalty?: any) => dispatch(timeLeftActions.increaseTimer(penalty)),
     decreaseTimer: (penalty?: any) => dispatch(timeLeftActions.decreaseTimer(penalty))
 
