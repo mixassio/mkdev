@@ -23,6 +23,7 @@ const mapDispatchToProps = (dispatch: any) => {
     setGameOver: () => dispatch(gameOverActions.setGameOver()),
     increaseTimer: (penalty?: any) => dispatch(timeLeftActions.increaseTimer(penalty)),
     decreaseTimer: (penalty?: any) => dispatch(timeLeftActions.decreaseTimer(penalty))
+
   };
 };
 const mapStateToProps = (state: any) => ({

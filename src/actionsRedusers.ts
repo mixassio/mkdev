@@ -1,4 +1,4 @@
-import { createSlice } from 'redux-starter-kit';
+import { createSlice } from "redux-starter-kit";
 import { combineReducers } from "redux";
 
 import _ from "lodash";
@@ -68,7 +68,8 @@ const timeLeft = createSlice({
             return newValue;
         },
     }
-});
+  }
+);
 
 export const actions = {
     dicePairActions: dicePair.actions,
