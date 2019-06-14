@@ -10,7 +10,7 @@ export interface Props {
   newQuestion(): void;
   increaseScore(): void;
   setGameOver(): void;
-  pushToScoreBoard(endScore: any): void;
+  pushToScoreBoard(endScore: number): void;
   increaseTimer(penalty?: any): void;
   decreaseTimer(penalty?: any): void;
 }

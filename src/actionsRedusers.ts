@@ -54,8 +54,8 @@ const scoreBoard = createSlice({
     slice: 'scoreBoard',
     initialState: [],
     reducers: {
-        pushToScoreBoard: (state, { payload }) => {
-            const { endScore } = payload;
+        pushToScoreBoard: (state: any, { payload }: any): [] => {
+            const { endScore }: number = payload;
             const arrived = new Date();
             return [...state, { arrived, score: endScore }];
         },
