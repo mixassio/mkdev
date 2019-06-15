@@ -1,5 +1,5 @@
-import {createSlice} from "redux-starter-kit";
-import {combineReducers} from "redux";
+import { createSlice } from "redux-starter-kit";
+import { combineReducers } from "redux";
 
 import _ from "lodash";
 
@@ -60,20 +60,21 @@ interface PushToScoreBoardAction {
   payload: number;
 }
 
-
 const scoreBoard = createSlice({
   slice: "scoreBoard",
   initialState: [],
   reducers: {},
   extraReducers: {
-    [gameOver.actions.setGameOver.toString()]: (state: ScoreBoardRecord[], { payload }: PushToScoreBoardAction) => {
+    [gameOver.actions.setGameOver.toString()]: (
+      state: ScoreBoardRecord[],
+      { payload }: PushToScoreBoardAction
+    ) => {
       console.log(payload);
       const achieved = new Date().toString();
       state.push({ achieved, score: payload });
     }
-  },
+  }
 });
-
 
 const timeLeft = createSlice({
   slice: "timeLeft",
@@ -89,10 +90,8 @@ const timeLeft = createSlice({
     },
     decreaseTimer: (state, { payload }) => {
       const penalty = _.has(payload, "penalty") ? payload.penalty : null;
-      
-      return penalty ? 
-        (state - penalty) < 0 ? 0 : state - penalty
-        : state - 1
+
+      return penalty ? (state - penalty < 0 ? 0 : state - penalty) : state - 1;
     }
   }
 });
