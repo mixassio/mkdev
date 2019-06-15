@@ -51,7 +51,7 @@ const gameOver = createSlice({
 });
 
 interface ScoreBoardRecord {
-  achieved: Date;
+  achieved: string;
   score: number;
 }
 
@@ -68,7 +68,7 @@ const scoreBoard = createSlice({
   extraReducers: {
     [gameOver.actions.setGameOver.toString()]: (state: ScoreBoardRecord[], { payload }: PushToScoreBoardAction) => {
       console.log(payload);
-      const achieved = new Date();
+      const achieved = new Date().toString();
       state.push({ achieved, score: payload });
     }
   },

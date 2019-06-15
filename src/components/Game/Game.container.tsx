@@ -17,7 +17,7 @@ const {
 
 const mapDispatchToProps = (dispatch: any ) => {
   return {
-    setValue: (newVal: any) => dispatch(valueActions.setValue(newVal)),
+    setValue: (newVal: number) => dispatch(valueActions.setValue(newVal)),
     newQuestion: () => dispatch(dicePairActions.newQuestion()),
     increaseScore: () => dispatch(scoreActions.increaseScore()),
     setGameOver: (score: any) => dispatch(gameOverActions.setGameOver(score)),
