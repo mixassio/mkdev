@@ -9,8 +9,7 @@ export interface Props {
   setValue(val: any): void;
   newQuestion(): void;
   increaseScore(): void;
-  setGameOver(): void;
-  pushToScoreBoard(endScore: number): void;
+  setGameOver(score: number): void;
   increaseTimer(penalty?: any): void;
   decreaseTimer(penalty?: any): void;
 }

@@ -12,19 +12,15 @@ const {
   valueActions,
   scoreActions,
   gameOverActions,
-  scoreBoardActions,
   timeLeftActions
 } = actions;
 
-const mapDispatchToProps = (dispatch: any, getState: any) => {
+const mapDispatchToProps = (dispatch: any ) => {
   return {
     setValue: (newVal: any) => dispatch(valueActions.setValue(newVal)),
     newQuestion: () => dispatch(dicePairActions.newQuestion()),
     increaseScore: () => dispatch(scoreActions.increaseScore()),
-    setGameOver: () => {
-      dispatch(gameOverActions.setGameOver());
-      dispatch(scoreBoardActions.pushToScoreBoard({ endScore: getState().score }))
-    },
+    setGameOver: (score: any) => dispatch(gameOverActions.setGameOver(score)),
     increaseTimer: (penalty?: any) => dispatch(timeLeftActions.increaseTimer(penalty)),
     decreaseTimer: (penalty?: any) => dispatch(timeLeftActions.decreaseTimer(penalty))
 
@@ -69,10 +65,10 @@ class GameContainer extends Component<Props, State> {
   startTimer = () => {
     const id = window.setInterval(() => {
       const { timerId } = this.state;
-      const { setGameOver, timeLeft, decreaseTimer } = this.props;
+      const { setGameOver, timeLeft, decreaseTimer, score } = this.props;
 
       if (timeLeft <= 0) {
-        setGameOver();
+        setGameOver(score);
         window.clearInterval(timerId);
         return;
       }
@@ -128,7 +124,6 @@ class GameContainer extends Component<Props, State> {
       score,
       timeLeft
     } = this.props;
-
     return (
       <>
         <Game
