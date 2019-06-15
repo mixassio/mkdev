@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch: any ) => {
     setValue: (newVal: number) => dispatch(valueActions.setValue(newVal)),
     newQuestion: () => dispatch(dicePairActions.newQuestion()),
     increaseScore: () => dispatch(scoreActions.increaseScore()),
-    setGameOver: (score: any) => dispatch(gameOverActions.setGameOver(score)),
+    setGameOver: (score: number) => dispatch(gameOverActions.setGameOver(score)),
     increaseTimer: (penalty?: any) => dispatch(timeLeftActions.increaseTimer(penalty)),
     decreaseTimer: (penalty?: any) => dispatch(timeLeftActions.decreaseTimer(penalty))
 
