@@ -1,13 +1,29 @@
 import React from "react";
+import { applyMiddleware, createStore } from "redux"
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { configureStore } from "redux-starter-kit";
+import { save, load } from "redux-localstorage-simple"
+// import { configureStore, getDefaultMiddleware } from "redux-starter-kit";
+// import logger from 'redux-logger'
 import App from "./components/App";
 import rootReducer from "./actionsRedusers";
-
+/*
 const store = configureStore({
-  reducer: rootReducer
+  reducer: rootReducer,
+  middleware: [...getDefaultMiddleware(),
+    logger,
+  ]
 });
+*/
+const createStoreWithMiddleware 
+    = applyMiddleware(
+        save({ states: ['scoreBoard'] }) 
+    )(createStore)
+
+    const store = createStoreWithMiddleware(
+      rootReducer,    
+      load({ states: ['scoreBoard'] })
+  ) 
 
 ReactDOM.render(
   <Provider store={store}>
